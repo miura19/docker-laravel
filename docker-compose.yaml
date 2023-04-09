@@ -34,5 +34,19 @@ services:
     volumes:
       - mysql-volume:/var/lib/mysql
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      # - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      # - PMA_USER=root
+      # - PMA_PASSWORD=rootpass
+    links:
+      - db
+    ports:
+      - 4040:80
+    volumes:
+      - ./phpmyadmin/sessions:/sessions
+
 volumes:
   mysql-volume:
