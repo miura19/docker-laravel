@@ -10,4 +10,11 @@ COPY ./docker/app/php.ini /usr/local/etc/php/php.ini
 
 COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
 
+# Node.jsのインストール
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get install -y nodejs
+
+# npmパッケージのインストール
+RUN npm install -g npm
+
 WORKDIR /app
