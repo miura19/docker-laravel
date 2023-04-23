@@ -60,10 +60,10 @@ class Handler extends ExceptionHandler
             Log::error($exception->getMessage());
             return response()->view('errors.500', [], 500);
         }
-        if ($exception instanceof Exception) {
-            Log::error($exception->getMessage());
-            return response()->view('errors.500', [], 500);
-        }
+        // if ($exception instanceof Exception) {
+        //     Log::error($exception->getMessage());
+        //     return response()->view('errors.500', [], 500);
+        // }
         return parent::render($request, $exception);
     }
 }

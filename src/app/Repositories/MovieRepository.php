@@ -50,4 +50,20 @@ class MovieRepository
             throw $e;
         }
     }
+    /**
+     * トークンが発行されてから30分以内にアクセスされなかった場合はデータを削除する
+     * @param string $token
+     * @return int $result 1|0
+     */
+    public function deleteByToken($token)
+    {
+        try {
+            $result = DB::table('movies')->where('token', '=', $token)->delete();
+            return $result;
+        } catch (QueryException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }

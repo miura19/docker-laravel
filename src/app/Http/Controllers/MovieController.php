@@ -46,6 +46,10 @@ class MovieController extends Controller
         $date = $date->subMinute(30);
         $kari_data = $this->movieService->getByToken($token,$date);
         if (is_null($kari_data)){
+            $rerult = $this->movieService->deleteByToken($token);
+            if ($rerult === 0){
+                abort(500);
+            }
             return view('movie.faild');
         } else {
             return view('movie.finish');

@@ -27,5 +27,15 @@ class MovieService
         return $data;
     }
 
+    /**
+     * @param string $token
+     * @return int $result 1|0
+     */
+    public function deleteByToken($token)
+    {
+        $result = $this->MovieRepository->deleteByToken($token);
+        return $result;
+    }
+
     
 }
