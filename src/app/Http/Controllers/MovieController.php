@@ -3,15 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Mail\MovieMail;
 use Illuminate\Support\Facades\Mail;
+use App\Services\MovieService;
 
 class MovieController extends Controller
 {
+    private $movieService;
+
+    public function __construct(MovieService $movieService)
+    {
+        $this->movieService = $movieService;
+    }
+
     public function registration()
     {
         return view('movie.registration');
@@ -26,16 +33,22 @@ class MovieController extends Controller
         $datetime = new Carbon();
         $user_id = Auth::id();
         $token = Str::random(15);
-
-        DB::table('movies')->insert(['movie_name' => $movie_name, 'user_id' => $user_id, 'cinema' => $cinema, 'email' => $email, 'comment' => $comment, 'token' => $token,'created_at' => $datetime, 'updated_at' => $datetime]);
+        $this->movieService->storeMovie($movie_name,$cinema,$email,$comment,$datetime,$user_id,$token);
 
         Mail::send(new MovieMail($email, $token));
-
+        
         return view('movie.complete');
     }
-
-    public function finish()
+    
+    public function finish($token)
     {
-        return view('movie.finish');
+        $date = new Carbon;
+        $date = $date->subMinute(30);
+        $kari_data = $this->movieService->getByToken($token,$date);
+        if (is_null($kari_data)){
+            return view('movie.faild');
+        } else {
+            return view('movie.finish');
+        }
     }
 }
